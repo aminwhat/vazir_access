@@ -1,0 +1,22 @@
+flutter_icons:
+  # android:
+  # generate: false
+  # name: "launcher_icon"
+  # adaptive_icon_foreground: "#1c39bb"
+  # adaptive_icon_background: "#1c39bb"
+
+  # ios: true
+  image_path: "assets/logo/vazir.png"
+  # min_sdk_android: 29 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/logo/vazir.png"
+    background_color: "#fffff"
+    theme_color: "#fffff"
+  # windows:
+  #   generate: true
+  #   image_path: "path/to/image.png"
+  #   icon_size: 48 # min:48, max:256, default: 48
+  # macos:
+  #   generate: true
+  #   image_path: "path/to/image.png"
