@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  browser_launcher:
+    dependency: "direct main"
+    description:
+      name: browser_launcher
+      sha256: "6ee4c6b1f68a42e769ef6e663c4f56708522f7bce9d2ab6e308a37b612ffa4ec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   build:
     dependency: transitive
     description:
@@ -757,13 +765,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  web_api:
-    dependency: "direct main"
-    description:
-      path: "packages/web_api"
-      relative: true
-    source: path
-    version: "1.0.0+1"
   web_socket_channel:
     dependency: transitive
     description:
@@ -772,6 +773,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  webkit_inspection_protocol:
+    dependency: transitive
+    description:
+      name: webkit_inspection_protocol
+      sha256: "67d3a8b6c79e1987d19d848b0892e582dbb0c66c57cc1fef58a177dd2aa2823d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   win32:
     dependency: transitive
     description:

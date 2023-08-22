@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app/apis/danger_api.dart';
 import 'package:app/core/version.dart';
+import 'package:app/helper/global.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -42,13 +43,21 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Everything is fine',
               ),
-              Icon(Icons.check_circle_outline_outlined, color: Colors.green),
+              IconButton(
+                onPressed: () async {
+                  await DangerApi.openPanel();
+                },
+                icon: const Icon(
+                  Icons.check_circle_outline_outlined,
+                  color: Colors.green,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 35),

@@ -18,9 +18,8 @@ dependencies:
   system_tray: ^2.0.3
   launch_at_startup: ^0.2.2
   package_info_plus: ^4.1.0
-  web_api:
-    path: ./packages/web_api
   realm: ^1.4.0
+  browser_launcher: ^1.1.1
 
 dev_dependencies:
   flutter_test:
