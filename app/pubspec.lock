@@ -240,14 +240,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
-  plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: plugin_platform_interface
-      sha256: "43798d895c929056255600343db8f049921cbec94d31ec87f1dc5c16c01935dd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.5"
   pointycastle:
     dependency: transitive
     description:
@@ -341,14 +333,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
-  url_strategy:
-    dependency: "direct main"
-    description:
-      name: url_strategy
-      sha256: "42b68b42a9864c4d710401add17ad06e28f1c1d5500c93b98c431f6b0ea4ab87"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   vector_math:
     dependency: transitive
     description:
@@ -357,22 +341,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  webview_flutter_platform_interface:
-    dependency: "direct main"
-    description:
-      name: webview_flutter_platform_interface
-      sha256: "0ca3cfcc6781a7de701d580917af4a9efc4e3e129f8ead95a80587f0a749480a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.0"
-  webview_flutter_web:
-    dependency: "direct main"
-    description:
-      name: webview_flutter_web
-      sha256: "78494dd1be4b5b3070140cbdcc138b9736aa4619f00643f909da6d54f0ffc141"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2+1"
   xml:
     dependency: transitive
     description:
@@ -391,4 +359,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.0.6 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=2.5.0"

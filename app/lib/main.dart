@@ -1,14 +1,8 @@
 import 'package:app/helper/global.dart';
 import 'package:app/screens/screens.dart';
 import 'package:flutter/material.dart';
-import 'package:url_strategy/url_strategy.dart';
-import 'package:webview_flutter_web/webview_flutter_web.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
-void _init() {
-  setPathUrlStrategy();
-  WebViewPlatform.instance = WebWebViewPlatform();
-}
+void _init() {}
 
 void main() {
   _init();
