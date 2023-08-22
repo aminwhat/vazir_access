@@ -51,7 +51,9 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
               ),
               IconButton(
                 onPressed: () async {
-                  await DangerApi.openPanel();
+                  if (Platform.isWindows) {
+                    await DangerApi.openPanel();
+                  }
                 },
                 icon: const Icon(
                   Icons.check_circle_outline_outlined,
