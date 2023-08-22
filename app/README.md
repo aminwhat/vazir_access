@@ -23,3 +23,9 @@ dart run change_app_package_name:main io.vazir.access
 ```cmd
 dart run realm generate --watch
 ```
+
+## Msix
+
+```cmd
+dart run msix:create
+```
