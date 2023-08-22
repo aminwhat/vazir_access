@@ -1,6 +1,6 @@
 import 'dart:io';
+import 'package:app/core/version.dart';
 import 'package:flutter/material.dart';
-import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -15,7 +15,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     if (Platform.isWindows) {
       WindowManager.instance.setAlignment(Alignment.bottomRight, animate: true);
-      WindowManager.instance.hide();
     }
     super.initState();
   }
@@ -49,6 +48,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 35),
+          const Text('appVersion: $appVersion'),
         ],
       ),
     );

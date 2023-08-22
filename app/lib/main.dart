@@ -1,7 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:app/helper/global.dart';
 import 'package:app/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -47,9 +50,23 @@ Future<void> _tray() async {
       Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
     }
   });
+
+  AppWindow().hide();
 }
 
-Future<void> _startupApp() async {}
+Future<void> _startupApp() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  launchAtStartup.setup(
+    appName: packageInfo.appName,
+    appPath: Platform.resolvedExecutable,
+  );
+
+  await launchAtStartup.enable();
+  // await launchAtStartup.disable();
+  bool isEnabled = await launchAtStartup.isEnabled();
+  log('launch at Startup: $isEnabled');
+}
 
 Future<void> _init() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,6 +97,23 @@ class MyApp extends StatelessWidget {
       ),
       scaffoldMessengerKey: GLobal.scaffoldMessenger,
       home: const DashboardScreen(),
+      builder: (context, child) => AppBuilder(child: child!),
     );
+  }
+}
+
+class AppBuilder extends StatefulWidget {
+  const AppBuilder({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<AppBuilder> createState() => _AppBuilderState();
+}
+
+class _AppBuilderState extends State<AppBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

@@ -11,3 +11,15 @@ dart run flutter_native_splash:create
 ```cmd
 dart run flutter_launcher_icons
 ```
+
+## Change App ID
+
+```cmd
+dart run change_app_package_name:main io.vazir.access
+```
+
+## Realm
+
+```cmd
+dart run realm generate --watch
+```
