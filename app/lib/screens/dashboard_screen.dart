@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:app/apis/danger_api.dart';
 import 'package:app/core/version.dart';
-import 'package:app/helper/global.dart';
+import 'package:app/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -65,8 +65,8 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
             style: const ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.red),
             ),
-            onPressed: () async {
-              await DangerApi.danger();
+            onPressed: () {
+              Dialogs.danger(context);
             },
             child: const Padding(
               padding: EdgeInsets.all(25),
