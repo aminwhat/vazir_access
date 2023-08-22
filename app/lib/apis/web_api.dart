@@ -3,17 +3,19 @@ import 'package:browser_launcher/browser_launcher.dart';
 class WebApi {
   final String url;
   late Chrome chrome;
-  bool opend = false;
+  bool opened = false;
 
   WebApi(this.url);
 
   Future<void> open() async {
     chrome = await Chrome.startWithDebugPort([url]);
-    opend = true;
+    opened = true;
   }
 
   Future<void> close() async {
-    await chrome.close();
-    opend = false;
+    if (opened) {
+      await chrome.close();
+      opened = false;
+    }
   }
 }

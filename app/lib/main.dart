@@ -38,6 +38,7 @@ Future<void> _tray() async {
     MenuItemLabel(
         label: 'Exit',
         onClicked: (menuItem) async {
+          await GLobal.webApi.close();
           await windowManager.destroy();
         }),
   ]);
