@@ -35,7 +35,11 @@ Future<void> _tray() async {
   await menu.buildFrom([
     MenuItemLabel(label: 'Show', onClicked: (menuItem) => appWindow.show()),
     MenuItemLabel(label: 'Hide', onClicked: (menuItem) => appWindow.hide()),
-    MenuItemLabel(label: 'Exit', onClicked: (menuItem) => appWindow.close()),
+    MenuItemLabel(
+        label: 'Exit',
+        onClicked: (menuItem) async {
+          await windowManager.destroy();
+        }),
   ]);
 
   // set context menu
@@ -97,23 +101,6 @@ class MyApp extends StatelessWidget {
       ),
       scaffoldMessengerKey: GLobal.scaffoldMessenger,
       home: const DashboardScreen(),
-      builder: (context, child) => AppBuilder(child: child!),
     );
-  }
-}
-
-class AppBuilder extends StatefulWidget {
-  const AppBuilder({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  State<AppBuilder> createState() => _AppBuilderState();
-}
-
-class _AppBuilderState extends State<AppBuilder> {
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
   }
 }

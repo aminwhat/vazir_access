@@ -2,7 +2,7 @@ import 'package:app/helper/global.dart';
 import 'package:flutter/material.dart';
 
 abstract class Snacks {
-  void submitedSnackBar() {
+  static void submited() {
     SnackBar(
       content: SnackBarAction(
         label: 'label',
@@ -17,7 +17,7 @@ extension on SnackBar {
   ///
   /// based on the Global ScaffoldMassenger
   void show() {
-    ScaffoldMessenger.of(GLobal.scaffoldMessenger.currentContext!)
-        .showSnackBar(this);
+    GLobal.scaffoldMessenger.currentState?.clearSnackBars();
+    GLobal.scaffoldMessenger.currentState?.showSnackBar(this);
   }
 }

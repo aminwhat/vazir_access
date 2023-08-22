@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/apis/danger_api.dart';
 import 'package:app/core/version.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
@@ -10,13 +11,29 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
+  void _init() async {
+    // Add this line to override the default close handler
+    await windowManager.setPreventClose(true);
+    setState(() {});
+  }
+
   @override
   void initState() {
+    super.initState();
     if (Platform.isWindows) {
       WindowManager.instance.setAlignment(Alignment.bottomRight, animate: true);
+      windowManager.addListener(this);
+      _init();
     }
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isWindows) {
+      windowManager.removeListener(this);
+    }
+    super.dispose();
   }
 
   @override
@@ -39,7 +56,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: const ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.red),
             ),
-            onPressed: () {},
+            onPressed: () async {
+              await DangerApi.danger();
+            },
             child: const Padding(
               padding: EdgeInsets.all(25),
               child: Text(
@@ -48,10 +67,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 35),
-          const Text('appVersion: $appVersion'),
+          const Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 30, top: 40),
+              child: Text(
+                'appVersion: $appVersion',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  @override
+  void onWindowClose() {
+    WindowManager.instance.hide();
   }
 }
