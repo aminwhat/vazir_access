@@ -5,12 +5,8 @@ import * as cors from 'cors';
 import * as dotenv from 'dotenv';
 
 async function bootstrap() {
-  // #region: INit
-
   dotenv.config();
-  const port = process.env.PORT ?? 3780;
-
-  // #endregion: INit
+  const port: string = process.env.PORT ?? String(3780);
 
   const app = await NestFactory.create(AppModule);
 
@@ -21,4 +17,5 @@ async function bootstrap() {
     console.log('Running on port: ' + port);
   });
 }
+
 bootstrap();
