@@ -14,6 +14,7 @@ Future<void> _windowInit() async {
   WindowManager.instance.setMinimumSize(const Size(400, 200));
   WindowManager.instance.setTitle('Vazir Access');
   WindowManager.instance.setSize(const Size(500, 300));
+  WindowManager.instance.setMinimizable(false);
 }
 
 Future<void> _tray() async {
