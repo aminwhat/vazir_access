@@ -1,21 +1,18 @@
 import 'dart:io';
+import 'package:app/apis/web_api.dart';
 import 'package:app/helper/global.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:window_manager/window_manager.dart';
 
-abstract class DangerApi {
-  static Future<void> danger() async {
-    // TODO: let the other devices know
-
-    if (Platform.isWindows) {
-      await GLobal.webApi.close();
-
-      await launchAtStartup.disable();
-      await windowManager.destroy();
-    }
+final dangerProvider = FutureProvider.family<void, bool>((ref, emit) async {
+  if (emit) {
+    GLobal.socket.emit('setstatus', false);
   }
 
-  static Future<void> openPanel() async {
-    await GLobal.webApi.open();
+  if (Platform.isWindows) {
+    ref.watch(closeChromeProvider.future);
+    await launchAtStartup.disable();
+    await windowManager.destroy();
   }
-}
+});

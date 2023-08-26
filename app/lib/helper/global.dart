@@ -1,8 +1,16 @@
-import 'package:app/apis/web_api.dart';
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class GLobal {
   static final scaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
-  static const String _endPoint = 'http://5.202.172.196:8081/';
-  static WebApi webApi = WebApi(_endPoint);
+  static late String url;
+  static late final Socket socket;
+  static AppConnectionState connectionState = AppConnectionState.waiting;
+}
+
+enum AppConnectionState {
+  connected,
+  waiting,
+  disconnected,
+  danger,
 }

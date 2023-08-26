@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as dotenv from 'dotenv';
+import * as clc from 'cli-color';
 
 async function bootstrap() {
   dotenv.config();
@@ -14,7 +15,7 @@ async function bootstrap() {
   app.use(morgan('tiny'));
 
   await app.listen(port, () => {
-    console.log('Running on port: ' + port);
+    console.log('\n' + clc.bgCyan('Running on port: ' + port) + '\n');
   });
 }
 

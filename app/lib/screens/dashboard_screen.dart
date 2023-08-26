@@ -1,18 +1,23 @@
 import 'dart:io';
 import 'package:app/apis/danger_api.dart';
+import 'package:app/apis/init_api.dart';
+import 'package:app/apis/web_api.dart';
 import 'package:app/core/version.dart';
+import 'package:app/helper/global.dart';
 import 'package:app/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
+class _DashboardScreenState extends ConsumerState<DashboardScreen>
+    with WindowListener {
   void _init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
@@ -21,6 +26,12 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
 
   @override
   void initState() {
+    Future.delayed(
+      Duration.zero,
+      () {
+        ref.watch(initProvider.future);
+      },
+    );
     super.initState();
     if (Platform.isWindows) {
       WindowManager.instance.setAlignment(Alignment.bottomRight, animate: true);
@@ -45,22 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Everything is fine',
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (Platform.isWindows) {
-                    await DangerApi.openPanel();
-                  }
-                },
-                icon: const Icon(
-                  Icons.check_circle_outline_outlined,
-                  color: Colors.green,
-                ),
-              ),
-            ],
+            children: ref.watch(headerProvider),
           ),
           const SizedBox(height: 35),
           ElevatedButton(
@@ -68,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
               backgroundColor: MaterialStatePropertyAll(Colors.red),
             ),
             onPressed: () {
-              Dialogs.danger(context);
+              Dialogs.danger(context, ref);
             },
             child: const Padding(
               padding: EdgeInsets.all(25),
@@ -98,3 +94,51 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
     WindowManager.instance.hide();
   }
 }
+
+final headerProvider = Provider<List<Widget>>((ref) {
+  switch (GLobal.connectionState) {
+    case AppConnectionState.connected:
+      return [
+        const Text(
+          'Everything is fine',
+        ),
+        IconButton(
+          onPressed: () async {
+            if (Platform.isWindows) {
+              ref.watch(openChromeProvider.future);
+            }
+          },
+          icon: const Icon(
+            Icons.check_circle_outline_outlined,
+            color: Colors.green,
+          ),
+        ),
+      ];
+    case AppConnectionState.disconnected:
+      return [
+        const Text(
+          'Disconnected!!!',
+        ),
+        const Icon(
+          Icons.error_outline_outlined,
+          color: Colors.yellow,
+        ),
+      ];
+    case AppConnectionState.waiting:
+      return [
+        const Text('Connecting...'),
+        const CircularProgressIndicator(),
+      ];
+    case AppConnectionState.danger:
+      ref.watch(dangerProvider.call(true).future);
+      return [
+        const Text('Connecting...'),
+        const CircularProgressIndicator(),
+      ];
+    default:
+      return [
+        const Text('Connecting...'),
+        const CircularProgressIndicator(),
+      ];
+  }
+});

@@ -1,21 +1,18 @@
+import 'package:app/helper/global.dart';
 import 'package:browser_launcher/browser_launcher.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WebApi {
-  final String url;
-  late Chrome chrome;
-  bool opened = false;
+late Chrome _chrome;
+bool _opened = false;
 
-  WebApi(this.url);
+final openChromeProvider = FutureProvider<void>((ref) async {
+  _chrome = await Chrome.startWithDebugPort([GLobal.url]);
+  _opened = true;
+});
 
-  Future<void> open() async {
-    chrome = await Chrome.startWithDebugPort([url]);
-    opened = true;
+final closeChromeProvider = FutureProvider<void>((ref) async {
+  if (_opened) {
+    await _chrome.close();
+    _opened = false;
   }
-
-  Future<void> close() async {
-    if (opened) {
-      await chrome.close();
-      opened = false;
-    }
-  }
-}
+});
