@@ -1,18 +1,17 @@
 import 'dart:io';
-import 'package:app/apis/web_api.dart';
+import 'package:app/apis/chrome_api.dart';
 import 'package:app/helper/global.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:window_manager/window_manager.dart';
 
-final dangerProvider = FutureProvider.family<void, bool>((ref, emit) async {
-  if (emit) {
+abstract class DangerService {
+  static Future<void> danger() async {
     GLobal.socket.emit('setstatus', false);
-  }
 
-  if (Platform.isWindows) {
-    ref.watch(closeChromeProvider.future);
-    await launchAtStartup.disable();
-    await windowManager.destroy();
+    if (Platform.isWindows) {
+      await ChromeService.close();
+      await launchAtStartup.disable();
+      await windowManager.destroy();
+    }
   }
-});
+}

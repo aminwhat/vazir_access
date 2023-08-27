@@ -1,10 +1,7 @@
 import 'dart:io';
-import 'package:app/apis/danger_api.dart';
-import 'package:app/apis/init_api.dart';
-import 'package:app/apis/web_api.dart';
+import 'package:app/apis/socket_api.dart';
 import 'package:app/core/version.dart';
-import 'package:app/helper/global.dart';
-import 'package:app/widgets/dialogs.dart';
+import 'package:app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
@@ -18,6 +15,8 @@ class DashboardScreen extends ConsumerStatefulWidget {
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen>
     with WindowListener {
+  bool isAvailable = false;
+
   void _init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
@@ -26,12 +25,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
 
   @override
   void initState() {
-    Future.delayed(
-      Duration.zero,
-      () {
-        ref.watch(initProvider.future);
-      },
-    );
     super.initState();
     if (Platform.isWindows) {
       WindowManager.instance.setAlignment(Alignment.bottomRight, animate: true);
@@ -56,16 +49,26 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: ref.watch(headerProvider),
+            children: ref.watch(providerOfSocket).when(
+                  data: (data) {
+                    isAvailable = data.available;
+                    return data.children;
+                  },
+                  error: (error, stackTrace) => HeaderWidgets.error(),
+                  loading: () => HeaderWidgets.connecting(),
+                ),
           ),
           const SizedBox(height: 35),
           ElevatedButton(
-            style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.red),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(
+                  isAvailable ? Colors.red : Colors.grey),
             ),
-            onPressed: () {
-              Dialogs.danger(context, ref);
-            },
+            onPressed: isAvailable
+                ? () {
+                    Dialogs.danger(context);
+                  }
+                : null,
             child: const Padding(
               padding: EdgeInsets.all(25),
               child: Text(
@@ -94,51 +97,3 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     WindowManager.instance.hide();
   }
 }
-
-final headerProvider = Provider<List<Widget>>((ref) {
-  switch (GLobal.connectionState) {
-    case AppConnectionState.connected:
-      return [
-        const Text(
-          'Everything is fine',
-        ),
-        IconButton(
-          onPressed: () async {
-            if (Platform.isWindows) {
-              ref.watch(openChromeProvider.future);
-            }
-          },
-          icon: const Icon(
-            Icons.check_circle_outline_outlined,
-            color: Colors.green,
-          ),
-        ),
-      ];
-    case AppConnectionState.disconnected:
-      return [
-        const Text(
-          'Disconnected!!!',
-        ),
-        const Icon(
-          Icons.error_outline_outlined,
-          color: Colors.yellow,
-        ),
-      ];
-    case AppConnectionState.waiting:
-      return [
-        const Text('Connecting...'),
-        const CircularProgressIndicator(),
-      ];
-    case AppConnectionState.danger:
-      ref.watch(dangerProvider.call(true).future);
-      return [
-        const Text('Connecting...'),
-        const CircularProgressIndicator(),
-      ];
-    default:
-      return [
-        const Text('Connecting...'),
-        const CircularProgressIndicator(),
-      ];
-  }
-});

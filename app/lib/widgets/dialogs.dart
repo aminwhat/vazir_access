@@ -1,9 +1,8 @@
 import 'package:app/apis/danger_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class Dialogs {
-  static void danger(BuildContext context, WidgetRef ref) {
+  static void danger(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -14,7 +13,7 @@ abstract class Dialogs {
               backgroundColor: MaterialStatePropertyAll(Colors.red),
             ),
             onPressed: () async {
-              ref.watch(dangerProvider.call(true).future);
+              await DangerService.danger();
             },
             child: const Text(
               'Yes',
