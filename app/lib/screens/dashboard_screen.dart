@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app/apis/socket_api.dart';
 import 'package:app/core/version.dart';
+import 'package:app/screens/screens.dart';
 import 'package:app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,13 +78,23 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               ),
             ),
           ),
-          const Align(
+          Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
-              padding: EdgeInsets.only(left: 30, top: 40),
-              child: Text(
-                'appVersion: $appVersion',
-                style: TextStyle(color: Colors.grey),
+              padding: const EdgeInsets.only(left: 20),
+              child: TextButton(
+                style: const ButtonStyle(
+                    foregroundColor: MaterialStatePropertyAll(Colors.grey)),
+                onPressed: Platform.isAndroid
+                    ? () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsScreen(),
+                          ),
+                        );
+                      }
+                    : null,
+                child: const Text('appVersion: $appVersion'),
               ),
             ),
           ),

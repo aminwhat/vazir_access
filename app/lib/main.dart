@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:app/apis/danger_api.dart';
+import 'package:app/apis/chrome_api.dart';
 import 'package:app/apis/socket_api.dart';
 import 'package:app/helper/global.dart';
 import 'package:app/helper/logger.dart';
@@ -45,7 +45,8 @@ Future<void> _tray() async {
     MenuItemLabel(
         label: 'Exit',
         onClicked: (menuItem) async {
-          DangerService.danger();
+          await ChromeService.close();
+          await windowManager.destroy();
         }),
   ]);
 
