@@ -12,11 +12,11 @@ class SocketDB extends _SocketDB
 
   SocketDB(
     ObjectId id, {
-    String url = 'https://panel.baspar.vazir.io/',
+    String url = 'http://localhost:3781/power',
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<SocketDB>({
-        'url': 'https://panel.baspar.vazir.io/',
+        'url': 'http://localhost:3781/power',
       });
     }
     RealmObjectBase.set(this, 'id', id);

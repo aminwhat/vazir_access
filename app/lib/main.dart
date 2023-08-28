@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:app/apis/chrome_api.dart';
-import 'package:app/apis/socket_api.dart';
 import 'package:app/helper/global.dart';
 import 'package:app/models/socketdb.dart';
 import 'package:app/screens/screens.dart';
@@ -82,7 +81,8 @@ void _db() {
   log('***Checking Database***');
   var realm = Realm(Configuration.local([SocketDB.schema]));
   try {
-    realm.all<SocketDB>().first;
+    var first = realm.all<SocketDB>().first;
+    log(first.url);
     log('***Database is Healthy***');
   } on StateError {
     log('Config Database');
@@ -106,8 +106,6 @@ Future<void> _init() async {
   }
 
   _db();
-
-  SocketService.initConnection();
 }
 
 Future<void> main() async {

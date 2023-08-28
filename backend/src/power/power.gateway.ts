@@ -15,7 +15,9 @@ export class PowerGateway implements OnGatewayConnection {
   constructor(private powerService: PowerService) {}
 
   handleConnection(@ConnectedSocket() client: Socket, ...args: any[]) {
+    console.log('Client connected: ', client.id);
     this.server.emit('status', this.powerService.getStatus());
+    this.server.emit('url', this.powerService.getServerUrl());
   }
 
   @WebSocketServer()

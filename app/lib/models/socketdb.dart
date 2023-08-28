@@ -7,5 +7,5 @@ class _SocketDB {
   @PrimaryKey()
   late final ObjectId id;
 
-  String url = 'https://panel.baspar.vazir.io/';
+  String url = 'http://localhost:3781/power';
 }

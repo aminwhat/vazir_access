@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PowerService {
-  serverUrl: string = 'https://panel.baspar.vazir.io/';
+  serverUrl: string = 'https://baspar.vazir.io/';
   status: boolean = true;
 
   getServerUrl(): string {

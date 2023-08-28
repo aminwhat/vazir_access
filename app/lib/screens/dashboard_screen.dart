@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:app/apis/socket_api.dart';
 import 'package:app/core/version.dart';
+import 'package:app/helper/global.dart';
 import 'package:app/screens/screens.dart';
 import 'package:app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,7 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
 
   @override
   void initState() {
+    SocketService.initConnection();
     super.initState();
     if (Platform.isWindows) {
       WindowManager.instance.setAlignment(Alignment.bottomRight, animate: true);
@@ -37,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
     if (Platform.isWindows) {
       windowManager.removeListener(this);
     }
-    streamSocket.dispose();
+    GLobal.streamSocket.dispose();
     super.dispose();
   }
 
@@ -48,8 +51,13 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           StreamBuilder(
-            stream: streamSocket.getResponse,
+            stream: GLobal.streamSocket.getResponse,
             builder: (context, snapshot) {
+              Future.microtask(() {
+                isAvailable = snapshot.data?.available ?? false;
+                log('isAvailable: $isAvailable');
+                setState(() {});
+              });
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: snapshot.data?.children ?? HeaderWidgets.error(),

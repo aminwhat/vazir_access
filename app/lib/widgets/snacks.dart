@@ -2,10 +2,10 @@ import 'package:app/helper/global.dart';
 import 'package:flutter/material.dart';
 
 abstract class Snacks {
-  static void submited() {
+  static void success() {
     SnackBar(
       content: SnackBarAction(
-        label: 'label',
+        label: 'Success',
         onPressed: () {},
       ),
     ).show();
