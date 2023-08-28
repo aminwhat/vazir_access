@@ -81,21 +81,21 @@ Future<void> _startupApp() async {
 }
 
 void _db() {
-  log('Checking Database');
+  log('***Checking Database***');
   var realm = Realm(Configuration.local([SocketDB.schema]));
   try {
     realm.all<SocketDB>().first;
-    log('Database is Healthy');
+    log('***Database is Healthy***');
   } on StateError {
     log('Config Database');
     realm.write(() {
       realm.add<SocketDB>(SocketDB(ObjectId()));
     });
   } catch (e) {
-    log('Uknown Database Error :|');
+    log('***Uknown Database Error :|***');
   }
   realm.close();
-  log('Checking Database Finished');
+  log('***Checking Database Finished***');
 }
 
 Future<void> _init() async {
@@ -129,7 +129,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Vazir Access',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 0, 128, 255),
+        ),
         useMaterial3: true,
       ),
       scaffoldMessengerKey: GLobal.scaffoldMessenger,

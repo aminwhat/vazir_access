@@ -1,6 +1,7 @@
 import {
   ConnectedSocket,
   MessageBody,
+  OnGatewayConnection,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -9,9 +10,13 @@ import {
 import { Socket, Server } from 'socket.io';
 import { PowerService } from './power.service';
 
-@WebSocketGateway({ namespace: 'power' })
-export class PowerGateway {
+@WebSocketGateway({ namespace: 'power', transports: ['websocket'] })
+export class PowerGateway implements OnGatewayConnection {
   constructor(private powerService: PowerService) {}
+
+  handleConnection(@ConnectedSocket() client: Socket, ...args: any[]) {
+    this.server.emit('status', this.powerService.getStatus());
+  }
 
   @WebSocketServer()
   server: Server;

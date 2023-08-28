@@ -85,15 +85,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               child: TextButton(
                 style: const ButtonStyle(
                     foregroundColor: MaterialStatePropertyAll(Colors.grey)),
-                onPressed: Platform.isAndroid
-                    ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsScreen(),
-                          ),
-                        );
-                      }
-                    : null,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ),
+                  );
+                },
                 child: const Text('appVersion: $appVersion'),
               ),
             ),
