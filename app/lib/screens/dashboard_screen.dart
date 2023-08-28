@@ -103,6 +103,12 @@ class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          SocketService.initConnection();
+        },
+        child: const Icon(Icons.refresh_outlined),
+      ),
     );
   }
 
