@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:app/apis/chrome_api.dart';
 import 'package:app/apis/socket_api.dart';
 import 'package:app/helper/global.dart';
-import 'package:app/helper/logger.dart';
 import 'package:app/models/socketdb.dart';
 import 'package:app/screens/screens.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:realm/realm.dart';
@@ -114,10 +112,7 @@ Future<void> _init() async {
 
 Future<void> main() async {
   await _init();
-  runApp(ProviderScope(
-    observers: [AppObserver()],
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -135,7 +130,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       scaffoldMessengerKey: GLobal.scaffoldMessenger,
-      home: const ProviderScope(child: DashboardScreen()),
+      home: const DashboardScreen(),
     );
   }
 }

@@ -4,18 +4,16 @@ import 'package:app/core/version.dart';
 import 'package:app/screens/screens.dart';
 import 'package:app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-class DashboardScreen extends ConsumerStatefulWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends ConsumerState<DashboardScreen>
-    with WindowListener {
+class _DashboardScreenState extends State<DashboardScreen> with WindowListener {
   bool isAvailable = false;
 
   void _init() async {
@@ -39,6 +37,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     if (Platform.isWindows) {
       windowManager.removeListener(this);
     }
+    streamSocket.dispose();
     super.dispose();
   }
 
@@ -48,16 +47,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: ref.watch(providerOfSocket).when(
-                  data: (data) {
-                    isAvailable = data.available;
-                    return data.children;
-                  },
-                  error: (error, stackTrace) => HeaderWidgets.error(),
-                  loading: () => HeaderWidgets.connecting(),
-                ),
+          StreamBuilder(
+            stream: streamSocket.getResponse,
+            builder: (context, snapshot) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: snapshot.data?.children ?? HeaderWidgets.error(),
+              );
+            },
           ),
           const SizedBox(height: 35),
           ElevatedButton(

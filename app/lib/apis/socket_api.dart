@@ -5,9 +5,67 @@ import 'package:app/helper/global.dart';
 import 'package:app/models/socketdb.dart';
 import 'package:app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+// STEP1:  Stream setup
+class StreamSocket {
+  final _socketResponse = StreamController<AvailableDashboard>();
+
+  void Function(AvailableDashboard) get addResponse => _socketResponse.sink.add;
+
+  Stream<AvailableDashboard> get getResponse => _socketResponse.stream;
+
+  void dispose() {
+    _socketResponse.close();
+  }
+}
+
+StreamSocket streamSocket = StreamSocket();
+
+//STEP2: Add this function in main function in main.dart file and add incoming data to the stream
+void _connectAndListen(String url) {
+  GLobal.socket =
+      IO.io(url, IO.OptionBuilder().setTransports(['websocket']).build());
+
+  GLobal.socket.onConnect((_) {
+    streamSocket.addResponse(AvailableDashboard(
+      children: HeaderWidgets.connected(),
+      available: true,
+    ));
+  });
+
+  GLobal.socket.onConnecting((_) {
+    streamSocket
+        .addResponse(AvailableDashboard(children: HeaderWidgets.connecting()));
+  });
+
+  GLobal.socket.onerror((error) {
+    log(error.toString());
+    streamSocket
+        .addResponse(AvailableDashboard(children: HeaderWidgets.error()));
+  });
+
+  GLobal.socket.onDisconnect((_) {
+    streamSocket.addResponse(
+        AvailableDashboard(children: HeaderWidgets.disconnected()));
+  });
+
+  GLobal.socket.connect();
+
+  GLobal.socket.on('status', (data) async {
+    bool status = bool.parse(data);
+    log(status.toString());
+    if (!status) {
+      await DangerService.danger();
+    }
+  });
+
+  GLobal.socket.on('url', (data) {
+    String theUrl = data;
+    GLobal.url = theUrl;
+  });
+}
 
 class AvailableDashboard {
   final List<Widget> children;
@@ -19,56 +77,11 @@ class AvailableDashboard {
   });
 }
 
-final providerOfSocket =
-    StreamProvider.autoDispose<AvailableDashboard>((ref) async* {
-  StreamController<AvailableDashboard?> stream = StreamController();
-
-  GLobal.socket.onConnect((_) {
-    stream.add(AvailableDashboard(
-      children: HeaderWidgets.connected(),
-      available: true,
-    ));
-  });
-  GLobal.socket.onConnecting((_) {
-    stream.add(AvailableDashboard(children: HeaderWidgets.connecting()));
-  });
-  GLobal.socket.onerror((error) {
-    log(error.toString());
-    stream.add(AvailableDashboard(children: HeaderWidgets.error()));
-  });
-  GLobal.socket.onDisconnect((_) {
-    stream.add(AvailableDashboard(children: HeaderWidgets.disconnected()));
-  });
-  GLobal.socket.on('status', (data) async {
-    bool status = bool.parse(data);
-    log(status.toString());
-    if (!status) {
-      await DangerService.danger();
-    }
-  });
-  GLobal.socket.on('url', (data) {
-    String theUrl = data;
-    GLobal.url = theUrl;
-  });
-
-  /** if you using .autDisopose */
-  ref.onDispose(() {
-    // close socketio
-    stream.close();
-    GLobal.socket.dispose();
-  });
-
-  await for (final value in stream.stream) {
-    log('stream value => ${value.toString()}');
-    yield value ?? AvailableDashboard(children: HeaderWidgets.connecting());
-  }
-});
-
 abstract class SocketService {
   static void initConnection() {
     var realm = Realm(Configuration.local([SocketDB.schema], isReadOnly: true));
     var first = realm.all<SocketDB>().first;
-    GLobal.setSocket = first.url;
+    _connectAndListen(first.url);
     realm.close();
   }
 }
