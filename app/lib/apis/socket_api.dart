@@ -32,16 +32,17 @@ final providerOfSocket =
   GLobal.socket.onConnecting((_) {
     stream.add(AvailableDashboard(children: HeaderWidgets.connecting()));
   });
-  GLobal.socket.onerror((_) {
+  GLobal.socket.onerror((error) {
+    log(error.toString());
     stream.add(AvailableDashboard(children: HeaderWidgets.error()));
   });
   GLobal.socket.onDisconnect((_) {
     stream.add(AvailableDashboard(children: HeaderWidgets.disconnected()));
   });
   GLobal.socket.on('status', (data) async {
-    GLobal.status = bool.tryParse(data) ?? true;
-    log(GLobal.status.toString());
-    if (!GLobal.status) {
+    bool status = bool.parse(data);
+    log(status.toString());
+    if (!status) {
       await DangerService.danger();
     }
   });
@@ -49,13 +50,6 @@ final providerOfSocket =
     String theUrl = data;
     GLobal.url = theUrl;
   });
-
-  Future.delayed(
-    const Duration(seconds: 3),
-    () {
-      GLobal.socket.emit('getstatus');
-    },
-  );
 
   /** if you using .autDisopose */
   ref.onDispose(() {
@@ -74,12 +68,7 @@ abstract class SocketService {
   static void initConnection() {
     var realm = Realm(Configuration.local([SocketDB.schema], isReadOnly: true));
     var first = realm.all<SocketDB>().first;
-    GLobal.socket = io(
-      first.url,
-      OptionBuilder().setTransports(['websocket']).build(),
-    );
-
-    GLobal.socket.connect();
+    GLobal.setSocket = first.url;
     realm.close();
   }
 }
