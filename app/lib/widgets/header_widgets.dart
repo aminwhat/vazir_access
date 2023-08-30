@@ -55,4 +55,22 @@ abstract class HeaderWidgets {
       const Icon(Icons.signal_wifi_connected_no_internet_4_rounded),
     ];
   }
+
+  static List<Widget> danger() {
+    log('STATUS: danger');
+    return [
+      const Text(
+        'Danger Mode Enabled',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
+        ),
+      ),
+      const SizedBox(width: 5),
+      const Icon(
+        Icons.dangerous_outlined,
+        color: Colors.red,
+      ),
+    ];
+  }
 }

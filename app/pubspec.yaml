@@ -67,5 +67,5 @@ msix_config:
   publisher_display_name: Vazir
   identity_name: io.vazir.access
   msix_version: 0.0.0.1
-  logo_path: E:\dev\Projects\vazir_access\app\assets\logo\vazir_white.png
+  logo_path: D:\Projects\vazir_access\app\assets\logo\vazir_white.png
   capabilities: internetClient, location, microphone, webcam

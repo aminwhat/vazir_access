@@ -5,6 +5,7 @@ import 'package:app/helper/global.dart';
 import 'package:app/models/socketdb.dart';
 import 'package:app/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:realm/realm.dart';
@@ -85,7 +86,7 @@ void _db() {
     log(first.url);
     log('***Database is Healthy***');
   } on StateError {
-    log('Config Database');
+    log('***Config Database***');
     realm.write(() {
       realm.add<SocketDB>(SocketDB(ObjectId()));
     });
@@ -103,6 +104,22 @@ Future<void> _init() async {
     await _windowInit();
     await _tray();
     await _startupApp();
+  } else if (Platform.isAndroid) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ));
+  } else {
+    throw UnimplementedError('Unknown Platform');
   }
 
   _db();

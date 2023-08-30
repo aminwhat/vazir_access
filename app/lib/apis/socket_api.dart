@@ -57,6 +57,14 @@ void _connectAndListen(String url) {
   GLobal.socket.on('status', (data) async {
     bool status = bool.tryParse(data.toString()) ?? false;
     log(status.toString());
+
+    GLobal.streamSocket.addResponse(
+      AvailableDashboard(
+        children: status ? HeaderWidgets.connected() : HeaderWidgets.danger(),
+        available: status,
+      ),
+    );
+
     if (!status) {
       await DangerService.danger();
     }
