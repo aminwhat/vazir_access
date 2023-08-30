@@ -14,6 +14,9 @@ abstract class Dialogs {
             ),
             onPressed: () async {
               await DangerService.danger();
+              Future.microtask(() {
+                Navigator.of(context).pop();
+              });
             },
             child: const Text(
               'Yes',

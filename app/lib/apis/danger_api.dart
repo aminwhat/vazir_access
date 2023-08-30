@@ -5,8 +5,13 @@ import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:window_manager/window_manager.dart';
 
 abstract class DangerService {
+  static bool isDangered = false;
+
   static Future<void> danger() async {
-    GLobal.socket.emit('setstatus', false);
+    if (!isDangered) {
+      GLobal.socket.emit('setstatus', false);
+      isDangered = true;
+    }
 
     if (Platform.isWindows) {
       await ChromeService.close();

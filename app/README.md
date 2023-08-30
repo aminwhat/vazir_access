@@ -29,3 +29,9 @@ dart run realm generate --watch
 ```cmd
 dart run msix:create
 ```
+
+## Icons launcher
+
+```cmd
+dart run icons_launcher:create
+```

@@ -58,6 +58,8 @@ void _connectAndListen(String url) {
     bool status = bool.tryParse(data.toString()) ?? false;
     log(status.toString());
 
+    DangerService.isDangered = !status;
+
     GLobal.streamSocket.addResponse(
       AvailableDashboard(
         children: status ? HeaderWidgets.connected() : HeaderWidgets.danger(),
